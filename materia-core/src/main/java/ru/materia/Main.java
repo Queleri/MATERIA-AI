@@ -3,10 +3,13 @@ package ru.materia;
 import ru.materia.model.Material;
 import ru.materia.model.Wardrobe;
 import ru.materia.model.FurniturePart;
+import ru.materia.service.MateriaSelector;
 import ru.materia.service.MaterialCostCalculator;
 import ru.materia.service.WardrobeCalculator;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
 
@@ -71,5 +74,28 @@ public class Main {
         }
         System.out.println("=== ИТОГОВАЯ СТОИМОСТЬ ИЗГОТОВЛЕНИЯ ШКАФА ===");
         System.out.println(materialCostCalculator.calculateTotalCost(parts,ldsp) + " руб.");
+
+        List<Material> materials = new ArrayList<>();
+        materials.add(ldsp);
+        materials.add(mdf);
+        materials.add(fanera);
+        MateriaSelector materiaSelector = new MateriaSelector();
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Добро пожаловать в систему подбора материала по вашим параметрам! ");
+        System.out.print("Укажити ваш максимальный бюджет: ");
+        double maxBudget = scanner.nextDouble();
+        System.out.print("Укажите желаемую прочность материала: ");
+        double minStrength = scanner.nextDouble();
+        Material cheapestMaterial = materiaSelector.findCheapestMaterial(materials,parts,maxBudget,minStrength);
+        if (cheapestMaterial != null) {
+            System.out.println("Самый выгодный вариант: "
+                    + cheapestMaterial.getName()
+                    + ", цена за квадратный метр: "
+                    + cheapestMaterial.getPricePerSquareMeter()
+                    + " руб., прочность: "
+                    + cheapestMaterial.getStrength());
+        } else {
+            System.out.println("К сожалению, материалов по вашим требованиям не найдено.");
+        }
     }
 }
