@@ -58,4 +58,15 @@ public class FurniturePart {
          double totalArea = calculateArea() * quantity;
          return totalArea;
     }
+
+    @Override
+    public String toString() {
+        return "Составляющая изделия{" +
+                "Название ='" + name + '\'' +
+                ", Длина =" + length +
+                ", Ширина =" + width +
+                ", Толщина=" + thickness +
+                ", Количество =" + quantity +
+                '}';
+    }
 }

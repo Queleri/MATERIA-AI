@@ -50,5 +50,14 @@ public class Wardrobe {
         return shelfCount;
     }
 
-
+    @Override
+    public String toString() {
+        return "Шкаф{" +
+                "Высота=" + height +
+                ", Ширина=" + width +
+                ", Глубина=" + depth +
+                ", Количество полок=" + shelfCount +
+                ", Количество дверей=" + doorCount +
+                '}';
+    }
 }
