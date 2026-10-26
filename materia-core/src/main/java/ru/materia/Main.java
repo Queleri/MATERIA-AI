@@ -1,7 +1,9 @@
 package ru.materia;
 
+import ru.materia.model.Material;
 import ru.materia.model.Wardrobe;
 import ru.materia.model.FurniturePart;
+import ru.materia.service.MaterialCostCalculator;
 import ru.materia.service.WardrobeCalculator;
 
 import java.util.List;
@@ -56,5 +58,18 @@ public class Main {
         System.out.printf("Общая площадь: %.6f м²%n", totalArea);
 
         System.out.println();
+
+        Material ldsp = new Material(1,"ЛДСП",650,850,12);
+        Material mdf = new Material(2,"МДФ",750,1200,15);
+        Material fanera = new Material(3,"Фанера",680,1500,18);
+
+        MaterialCostCalculator materialCostCalculator = new MaterialCostCalculator();
+        System.out.println("=== СТОИМОСТЬ ИЗГОТОВЛЕНИЯ ИЗДЕЛИЙ ===");
+        for (FurniturePart part : parts) {
+            System.out.println(part.getName() + " : " +
+                    materialCostCalculator.calculatePartCost(part, ldsp) + " руб." );
+        }
+        System.out.println("=== ИТОГОВАЯ СТОИМОСТЬ ИЗГОТОВЛЕНИЯ ШКАФА ===");
+        System.out.println(materialCostCalculator.calculateTotalCost(parts,ldsp) + " руб.");
     }
 }
