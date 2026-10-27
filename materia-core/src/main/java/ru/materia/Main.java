@@ -3,6 +3,9 @@ package ru.materia;
 import ru.materia.model.Material;
 import ru.materia.model.Wardrobe;
 import ru.materia.model.FurniturePart;
+import ru.materia.model.specification.ProductComponent;
+import ru.materia.model.specification.ProductDimensions;
+import ru.materia.model.specification.ProductSpecification;
 import ru.materia.service.MateriaSelector;
 import ru.materia.service.MaterialCostCalculator;
 import ru.materia.service.WardrobeCalculator;
@@ -97,5 +100,19 @@ public class Main {
         } else {
             System.out.println("К сожалению, материалов по вашим требованиям не найдено.");
         }
+        ProductDimensions dimensions =
+                new ProductDimensions(1400, 750, 700);
+        List<ProductComponent> components = List.of(
+                new ProductComponent("Столешница", "PANEL", 1),
+                new ProductComponent("Ножка", "SUPPORT", 4)
+        );
+        ProductSpecification specification =
+                new ProductSpecification(
+                        "Компьютерный стол",
+                        "TABLE",
+                        dimensions,
+                        components
+                );
+        System.out.println(specification);
     }
 }
