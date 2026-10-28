@@ -1,11 +1,15 @@
 package ru.materia.model.specification;
-
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 public class ProductComponent {
     private final String name;
     private final String type;
     private final int quantity;
 
-    public ProductComponent(String name, String type, int quantity) {
+    @JsonCreator
+    public ProductComponent(@JsonProperty("name") String name,
+                            @JsonProperty("type") String type,
+                            @JsonProperty("quantity") int quantity) {
         if (name == null || name.isBlank())
             throw new IllegalArgumentException("Название не может быть null или пустым");
         if (type == null || type.isBlank())

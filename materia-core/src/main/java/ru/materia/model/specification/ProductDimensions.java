@@ -1,11 +1,18 @@
 package ru.materia.model.specification;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ProductDimensions {
     private final int width;
     private final int height;
     private final int depth;
 
-    public ProductDimensions(int width, int height, int depth) {
+    @JsonCreator
+    public ProductDimensions(
+            @JsonProperty("width") int width,
+            @JsonProperty("height") int height,
+            @JsonProperty("depth") int depth
+    ) {
         if (width <= 0)
             throw new IllegalArgumentException("Ширина не может быть меньше 0");
         if (height <= 0)

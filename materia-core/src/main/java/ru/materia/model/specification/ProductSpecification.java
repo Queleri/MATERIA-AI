@@ -1,5 +1,8 @@
 package ru.materia.model.specification;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
 public class ProductSpecification {
@@ -8,7 +11,11 @@ public class ProductSpecification {
     private final ProductDimensions dimensions;
     private final List<ProductComponent> components;
 
-    public ProductSpecification(String productName, String productType, ProductDimensions dimensions, List<ProductComponent> components) {
+    @JsonCreator
+    public ProductSpecification(@JsonProperty ("productName") String productName,
+                                @JsonProperty ("productType") String productType,
+                                @JsonProperty ("dimensions") ProductDimensions dimensions,
+                                @JsonProperty ("components") List<ProductComponent> components) {
         if (productName == null || productName.isBlank())
             throw new IllegalArgumentException("Название продукта не может быть null или пустым");
         if (productType == null || productType.isBlank())

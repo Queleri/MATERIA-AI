@@ -9,6 +9,7 @@ import ru.materia.model.specification.ProductSpecification;
 import ru.materia.service.MateriaSelector;
 import ru.materia.service.MaterialCostCalculator;
 import ru.materia.service.WardrobeCalculator;
+import ru.materia.service.json.ProductJsonConverter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,10 +103,12 @@ public class Main {
         }
         ProductDimensions dimensions =
                 new ProductDimensions(1400, 750, 700);
+
         List<ProductComponent> components = List.of(
                 new ProductComponent("Столешница", "PANEL", 1),
                 new ProductComponent("Ножка", "SUPPORT", 4)
         );
+
         ProductSpecification specification =
                 new ProductSpecification(
                         "Компьютерный стол",
@@ -113,6 +116,18 @@ public class Main {
                         dimensions,
                         components
                 );
-        System.out.println(specification);
+
+        ProductJsonConverter converter = new ProductJsonConverter();
+
+        String json = converter.toJson(specification);
+
+        System.out.println("JSON:");
+        System.out.println(json);
+
+        ProductSpecification restored = converter.fromJson(json);
+
+        System.out.println("Восстановленный объект:");
+        System.out.println(restored);
+        converter.fromJson("null");
     }
 }
