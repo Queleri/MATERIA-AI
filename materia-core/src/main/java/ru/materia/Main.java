@@ -132,7 +132,8 @@ public class Main {
         System.out.println(restored);
 
         AiProductAnalyzer analyzer = new MockProductAnalyzer();
-        ProductSpecification result = analyzer.analyze("Хочу компьютерный стол шириной 1400 мм");
+        ProductSpecification result = analyzer.analyze(
+                "Хочу компьютерный стол шириной 1400 мм");
         System.out.println(result);
     }
 }

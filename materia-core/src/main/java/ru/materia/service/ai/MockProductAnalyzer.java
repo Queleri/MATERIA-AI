@@ -22,4 +22,5 @@ public class MockProductAnalyzer implements AiProductAnalyzer{
                 "TABLE",dimensions,components);
             return computerTable;
     }
+
 }
