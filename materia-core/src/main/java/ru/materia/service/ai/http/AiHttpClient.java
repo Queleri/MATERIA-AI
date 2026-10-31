@@ -25,4 +25,24 @@ public class AiHttpClient {
             throw new RuntimeException("Ошибка http "+statusCode);
         return response.body();
     }
+    public String sendPost(String url, String jsonBody, String apiKey) throws IOException, InterruptedException{
+        if (url == null || url.isBlank())
+            throw new IllegalArgumentException("URL не может быть null или состоять из пробелов");
+        if (jsonBody == null || jsonBody.isBlank())
+            throw new IllegalArgumentException("JSON тело не может быть null или состоять из пробелов");
+        if (apiKey == null || apiKey.isBlank())
+            throw new IllegalArgumentException("API ключ не может быть null или состоять из пробелов");
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .header("Content-Type", "application/json")
+                .header("x-goog-api-key", apiKey)
+                .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
+                .build();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        int statusCode = response.statusCode();
+        if (statusCode < 200 || statusCode >= 300) {
+            throw new RuntimeException("Ошибка HTTP: " + statusCode);
+        }
+        return response.body();
+    }
 }
