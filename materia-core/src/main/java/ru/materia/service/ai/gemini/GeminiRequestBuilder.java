@@ -4,37 +4,94 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 public class GeminiRequestBuilder {
+
+    private final ObjectMapper mapper = new ObjectMapper();
+
     private static final String SYSTEM_PROMPT = """
         Ты система анализа промышленных изделий.
 
-        Проанализируй описание пользователя и определи:
+        Проанализируй описание изделия и определи:
         - название изделия;
         - тип изделия;
-        - ширину, высоту и глубину в миллиметрах;
-        - основные конструктивные компоненты;
-        - количество каждого компонента.
+        - габариты в миллиметрах;
+        - основные компоненты и их количество.
 
-        Верни результат строго в формате JSON.
+        Возвращай данные строго в соответствии
+        с заданной JSON-схемой.
 
-        Не добавляй пояснения или Markdown.
+        Не добавляй пояснений и Markdown.
         """;
-    private final ObjectMapper objectMapper = new ObjectMapper();       //для java- json и обратно
+
+    private static final String RESPONSE_SCHEMA = """
+            {
+              "type": "object",
+              "properties": {
+                "productName": {
+                  "type": "string"
+                },
+                "productType": {
+                  "type": "string"
+                },
+                "dimensions": {
+                  "type": "object",
+                  "properties": {
+                    "width": {"type": "integer"},
+                    "height": {"type": "integer"},
+                    "depth": {"type": "integer"}
+                  },
+                  "required": ["width", "height", "depth"]
+                },
+                "components": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {"type": "string"},
+                      "type": {"type": "string"},
+                      "quantity": {"type": "integer"}
+                    },
+                    "required": ["name", "type", "quantity"]
+                  }
+                }
+              },
+              "required": [
+                "productName",
+                "productType",
+                "dimensions",
+                "components"
+              ]
+            }
+            """;
+
     public String buildRequest(String description) {
         if (description == null || description.isBlank()) {
-            throw new IllegalArgumentException("Описание не может быть пустым");
+            throw new IllegalArgumentException(
+                    "Описание изделия не должно быть пустым"
+            );
         }
-        String prompt = SYSTEM_PROMPT + "\nОписание изделия:\n" + description;
-        ObjectNode root = objectMapper.createObjectNode();              //[]
-        ArrayNode contents = objectMapper.createArrayNode();            //{}
-        ObjectNode contentObject = objectMapper.createObjectNode();
-        ArrayNode parts = objectMapper.createArrayNode();
-        ObjectNode textObject = objectMapper.createObjectNode();
-        textObject.put("text", prompt);
-        parts.add(textObject);
-        contentObject.set("parts", parts);
-        contents.add(contentObject);
-        root.set("contents", contents);
-        return root.toString();
+        ObjectNode request = mapper.createObjectNode();
+        request.putArray("contents")
+                .addObject()
+                .putArray("parts")
+                .addObject()
+                .put("text", SYSTEM_PROMPT + "\n" + description);
+        ObjectNode format = request
+                .putObject("generationConfig")
+                .putObject("responseFormat")
+                .putObject("text");
+        format.put("mimeType", "APPLICATION_JSON");
+        try {
+            format.set("schema", mapper.readTree(RESPONSE_SCHEMA));
+            return mapper.writeValueAsString(request);
+        } catch (JsonProcessingException e) {
+            throw new IllegalStateException("Ошибка формирования запроса Gemini", e);
+        }
     }
 }
+

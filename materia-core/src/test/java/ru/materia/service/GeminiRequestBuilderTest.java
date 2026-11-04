@@ -76,4 +76,24 @@ public class GeminiRequestBuilderTest {
                 .asText();
         assertTrue(prompt.contains("Ты система анализа промышленных изделий"));
     }
+
+    @Test
+    void shouldIncludeStructuredOutput() throws Exception {
+        String json = builder.buildRequest("Стул высотой 950 мм");
+        JsonNode root = new ObjectMapper().readTree(json);
+        JsonNode format = root.path("generationConfig")
+                .path("responseFormat")
+                .path("text");
+
+        assertEquals("APPLICATION_JSON",
+                format.path("mimeType").asText());
+        JsonNode schema = format.path("schema");
+        assertEquals("object", schema.path("type").asText());
+
+        assertTrue(schema.path("properties").has("productName"));
+        assertTrue(schema.path("properties").has("productType"));
+        assertTrue(schema.path("properties").has("dimensions"));
+        assertTrue(schema.path("properties").has("components"));
+    }
+
 }
