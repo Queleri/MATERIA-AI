@@ -25,6 +25,7 @@ public class AiHttpClient {
             throw new RuntimeException("Ошибка http "+statusCode);
         return response.body();
     }
+    //overloading
     public String sendPost(String url, String jsonBody, String apiKey) throws IOException, InterruptedException{
         if (url == null || url.isBlank())
             throw new IllegalArgumentException("URL не может быть null или состоять из пробелов");

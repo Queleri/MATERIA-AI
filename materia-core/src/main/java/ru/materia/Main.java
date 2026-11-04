@@ -10,6 +10,7 @@ import ru.materia.service.MateriaSelector;
 import ru.materia.service.MaterialCostCalculator;
 import ru.materia.service.WardrobeCalculator;
 import ru.materia.service.ai.AiProductAnalyzer;
+import ru.materia.service.ai.GeminiProductAnalyzer;
 import ru.materia.service.ai.MockProductAnalyzer;
 import ru.materia.service.json.ProductJsonConverter;
 
@@ -132,8 +133,7 @@ public class Main {
         System.out.println(restored);
 
         AiProductAnalyzer analyzer = new MockProductAnalyzer();
-        ProductSpecification result = analyzer.analyze(
-                "Хочу компьютерный стол шириной 1400 мм");
-        System.out.println(result);
+
+
     }
 }
