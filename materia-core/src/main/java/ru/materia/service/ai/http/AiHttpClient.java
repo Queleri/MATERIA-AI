@@ -41,8 +41,11 @@ public class AiHttpClient {
                 .build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         int statusCode = response.statusCode();
-        if (statusCode < 200 || statusCode >= 300) {
-            throw new RuntimeException("Ошибка HTTP: " + statusCode);
+        if (response.statusCode() < 200 || response.statusCode() >= 300) {
+            throw new IllegalStateException(
+                    "Ошибка Gemini API. HTTP: " + response.statusCode()
+                            + "\nОтвет сервера: " + response.body()
+            );
         }
         return response.body();
     }
