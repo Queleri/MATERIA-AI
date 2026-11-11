@@ -6,10 +6,19 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Objects;
 
 
 public class AiHttpClient {
-    private final HttpClient client = HttpClient.newHttpClient();
+    private final HttpClient client;
+
+    public AiHttpClient() {
+        this(HttpClient.newHttpClient());
+    }
+
+    public AiHttpClient(HttpClient client) {
+        this.client = Objects.requireNonNull(client);
+    }
     public String sendPost(String url, String jsonBody) throws IOException, InterruptedException {
         if (url == null || url.isBlank())
             throw new IllegalArgumentException("URL не может быть null или состоять только из пробелов");
