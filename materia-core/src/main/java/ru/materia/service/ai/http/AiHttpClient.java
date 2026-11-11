@@ -1,5 +1,6 @@
 package ru.materia.service.ai.http;
 
+import ru.materia.service.ai.exception.AiApiException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -41,12 +42,13 @@ public class AiHttpClient {
                 .build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         int statusCode = response.statusCode();
-        if (response.statusCode() < 200 || response.statusCode() >= 300) {
-            throw new IllegalStateException(
-                    "Ошибка Gemini API. HTTP: " + response.statusCode()
-                            + "\nОтвет сервера: " + response.body()
+        if (statusCode < 200 || statusCode >= 300) {
+            throw new AiApiException(
+                    statusCode,
+                    "Ошибка AI API: " + response.body()
             );
         }
         return response.body();
     }
-}
+    }
+

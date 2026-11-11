@@ -1,24 +1,11 @@
 package ru.materia;
 
-import ru.materia.model.Material;
-import ru.materia.model.Wardrobe;
-import ru.materia.model.FurniturePart;
-import ru.materia.model.specification.ProductComponent;
-import ru.materia.model.specification.ProductDimensions;
 import ru.materia.model.specification.ProductSpecification;
-import ru.materia.service.MateriaSelector;
-import ru.materia.service.MaterialCostCalculator;
-import ru.materia.service.WardrobeCalculator;
-import ru.materia.service.ai.AiProductAnalyzer;
 import ru.materia.service.ai.GeminiProductAnalyzer;
-import ru.materia.service.ai.MockProductAnalyzer;
 import ru.materia.service.ai.gemini.GeminiRequestBuilder;
 import ru.materia.service.ai.http.AiHttpClient;
 import ru.materia.service.json.ProductJsonConverter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
 
 public class Main {
 
